@@ -1,21 +1,7 @@
-from typing import List
-from functools import reduce
 from src.operations.Operation import Operation
 from src.Expression import Expression
 from src.SplitResult import SplitResult
-
-
-def charWithDepthsIndexes(sentence: str, targetChar: str, depth: int) -> List[int]:
-  indexes=[]
-  currentDepth=0
-  for index, char in enumerate(sentence):
-    if char=='(':
-      currentDepth+=1
-    elif char==")":
-      currentDepth-=1
-    elif char==targetChar and depth==currentDepth:
-      indexes.append(index)
-  return indexes
+from src.Utils import charWithDepthsIndexes, splitInIndexes
 
 
 class OperationSplitter:
@@ -26,5 +12,12 @@ class OperationSplitter:
         operation: Operation) -> SplitResult:
       separator = operation.symbol
       sentence = expression.sentence
+
+      operationIndexes = charWithDepthsIndexes(sentence, separator, 0)
       
-      return SplitResult([], None)
+      newExpressions = list(map(
+        lambda subSentence: Expression(subSentence),
+        splitInIndexes(sentence, operationIndexes)
+      ))
+      
+      return SplitResult(newExpressions, operation)

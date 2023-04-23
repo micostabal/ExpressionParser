@@ -16,13 +16,13 @@ class ExpressionParser:
         self.operations=operations
     
     def evaluate(self, expression: Expression) -> int:
+        expression.stripRedundantParenthesis()
         for operation in self.operations:
           splitResult=self.splitter.splitExpression(expression, operation)
           if not splitResult.isSingleExpression():
+            exprs = list(map(lambda expr: self.evaluate(expr), splitResult.expressions))
             return reduce(
-              lambda x, y: operation.resolve(
-                self.evaluate(x), self.evaluate(y)
-              ),
-              splitResult.expressions
+              lambda x, y: operation.resolve(x, y),
+              exprs
             )
         return self.evaluator.resolve(splitResult.expressions[0])

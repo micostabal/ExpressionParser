@@ -1,4 +1,4 @@
-import Operation
+from src.operations.Operation import Operation
 
 class Sum(Operation):
     
