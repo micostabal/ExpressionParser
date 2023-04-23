@@ -54,6 +54,13 @@ class ExpressionParserTest(unittest.TestCase):
         
         self.assertEqual(result, 96)
 
+    def test_simpleExpression_f7(self):
+        expression = Expression("1 + 2*3")
+        
+        result = ExpressionParserTest.parser.evaluate(expression)
+        
+        self.assertEqual(result, 7)
+
 
 if __name__ == '__main__':
     unittest.main()
